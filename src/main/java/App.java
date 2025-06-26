@@ -18,7 +18,7 @@ public class App {
             System.out.println("0. Salir");
             System.out.print("Elige una opción: ");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // limpiar buffer
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1 -> service.cargarArchivo("src/main/resources/datos.TXT");

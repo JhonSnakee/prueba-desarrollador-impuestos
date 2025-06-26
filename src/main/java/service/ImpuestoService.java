@@ -133,13 +133,14 @@ public class ImpuestoService {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                System.out.println("Información del Sticker: " + sticker);
-                System.out.println("Fecha Movimiento: " + rs.getDate("fecha_movimiento"));
-                System.out.println("Tipo Horario: " + rs.getString("tipo_horario"));
-                System.out.println("Fecha Recaudo: " + rs.getDate("fecha_recaudo"));
-                System.out.println("Nro Identificación: " + rs.getLong("nro_id"));
-                System.out.println("Nro Formulario: " + rs.getLong("nro_form"));
-                System.out.println("Valor: " + rs.getLong("valor"));
+                System.out.println("\nInformación del Sticker: " + sticker);
+                System.out.println("-------------------------------------------------------------------------------------------");
+                System.out.printf("%-20s %-20s %-20s %-25s %-25s %-15s%n",
+                        "Fecha de movimiento", "Tipo de horario", "Fecha de recaudo",
+                        "Número de identificación", "Número de formulario", "Valor");
+                System.out.printf("%-20s %-20s %-20s %-25d %-25d %-15d%n",
+                        rs.getDate("fecha_movimiento"), rs.getString("tipo_horario"), rs.getDate("fecha_recaudo"),
+                        rs.getLong("nro_id"), rs.getLong("nro_form"), rs.getLong("valor"));
 
                 Scanner scanner = new Scanner(System.in);
                 System.out.print("\n¿Deseas exportar este registro a Excel? (S/N): ");
@@ -151,7 +152,6 @@ public class ImpuestoService {
             } else {
                 System.out.println("❌ No se encontró el sticker.");
             }
-
         } catch (Exception e) {
             System.out.println("❌ Ocurrió un error al generar la búsqueda. Por favor, verifique los datos ingresados.");
         }
