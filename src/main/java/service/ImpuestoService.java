@@ -46,7 +46,7 @@ public class ImpuestoService {
             System.out.println("✅ Registros cargados: " + count);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("❌ Ocurrió un error al cargar el documento: " + e.getMessage());
         }
     }
 
@@ -74,18 +74,28 @@ public class ImpuestoService {
             stmt.setDate(1, java.sql.Date.valueOf(fecha));
             ResultSet rs = stmt.executeQuery();
 
-            System.out.printf("%-15s %-15s %-20s %-15s %-10s%n", "Fecha", "Sticker", "Nro ID", "Formulario", "Valor");
-            while (rs.next()) {
-                System.out.printf("%-15s %-15d %-20d %-15d %-10d%n",
-                        rs.getDate(1), rs.getLong(2), rs.getLong(3), rs.getLong(4), rs.getLong(5));
+            if (rs.next()) {
+                System.out.printf("%-15s %-15s %-20s %-15s %-10s%n", "Fecha", "Sticker", "Nro ID", "Formulario", "Valor");
+                while (rs.next()) {
+                    System.out.printf("%-15s %-15d %-20d %-15d %-10d%n",
+                            rs.getDate(1), rs.getLong(2), rs.getLong(3), rs.getLong(4), rs.getLong(5));
+                }
+            } else {
+                System.out.println("❌ No se encontraron registros para la fecha ingresada.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("❌ Ocurrió un error al generar la búsqueda. Por favor, verifique los datos ingresados.");
         }
     }
 
     public void consultaPorTipoHorario(String tipo) {
         String sql = "SELECT COUNT(*), SUM(valor) FROM impuestos WHERE tipo_horario = ?";
+
+        if (!tipo.equals("N") && !tipo.equals("A")) {
+            System.out.println("❌ Ha ingresado una opción no válida.");
+            return;
+        }
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -93,13 +103,24 @@ public class ImpuestoService {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                System.out.println("Horario: " + tipo);
-                System.out.println("Cantidad de registros: " + rs.getInt(1));
-                System.out.println("Suma total de valores: " + rs.getLong(2));
+                int cantidad = rs.getInt(1);
+                long suma = rs.getLong(2);
+
+                String titulo = String.format("Consulta consolidada por Cantidad y Valor de los registros Horario: %s", tipo);
+                String linea = "----------------------------------------------------------------------------------------";
+                String encabezado = String.format("%-45s | %-45s", "Cantidad de registros cargados al sistema", "Suma total de los valores cargados al sistema");
+                String valores = String.format("%-45d | %-45d", cantidad, suma);
+
+                System.out.println("\n" + titulo);
+                System.out.println(linea);
+                System.out.println(encabezado);
+                System.out.println(valores);
+            } else {
+                System.out.println("❌ No se encontraron registros para el tipo de horario seleccionado.");
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("❌ Ocurrió un error al generar la búsqueda. Por favor, verifique los datos ingresados.");
         }
     }
 
@@ -132,7 +153,7 @@ public class ImpuestoService {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("❌ Ocurrió un error al generar la búsqueda. Por favor, verifique los datos ingresados.");
         }
     }
 
@@ -172,7 +193,7 @@ public class ImpuestoService {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("❌ Ocurrió un error al generar el documento: " + e.getMessage());
         }
     }
 
@@ -210,7 +231,7 @@ public class ImpuestoService {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("❌ Ocurrió un error al generar el documento: " + e.getMessage());
         }
     }
 }
