@@ -11,7 +11,6 @@ public class Impuesto {
     private long nroForm;
     private long valor;
 
-    // Constructor completo
     public Impuesto(long sticker, LocalDate fechaMovimiento, LocalDate fechaRecaudo,
                     String tipoHorario, long nroId, long nroForm, long valor) {
         this.sticker = sticker;
@@ -23,7 +22,6 @@ public class Impuesto {
         this.valor = valor;
     }
 
-    // Getters
     public long getSticker() {
         return sticker;
     }
