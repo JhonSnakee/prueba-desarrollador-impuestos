@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class ImpuestoService {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -118,6 +119,14 @@ public class ImpuestoService {
                 System.out.println("Nro Identificación: " + rs.getLong("nro_id"));
                 System.out.println("Nro Formulario: " + rs.getLong("nro_form"));
                 System.out.println("Valor: " + rs.getLong("valor"));
+
+                Scanner scanner = new Scanner(System.in);
+                System.out.print("\n¿Deseas exportar este registro a Excel? (S/N): ");
+                String respuesta = scanner.nextLine().trim().toUpperCase();
+                if (respuesta.equals("S")) {
+                    exportarStickerExcel(sticker);
+                }
+
             } else {
                 System.out.println("❌ No se encontró el sticker.");
             }
@@ -127,7 +136,48 @@ public class ImpuestoService {
         }
     }
 
-    public void exportarExcel(String nombreArchivo) {
+    public void exportarStickerExcel(long sticker) {
+        String sql = "SELECT * FROM impuestos WHERE sticker = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             Workbook workbook = new HSSFWorkbook()) {
+
+            stmt.setLong(1, sticker);
+            ResultSet rs = stmt.executeQuery();
+
+            Sheet sheet = workbook.createSheet("Impuesto");
+            Row header = sheet.createRow(0);
+            String[] columnas = {"Sticker", "Fecha Movimiento", "Fecha Recaudo", "Tipo Horario",
+                    "Nro ID", "Nro Formulario", "Valor"};
+            for (int i = 0; i < columnas.length; i++) {
+                header.createCell(i).setCellValue(columnas[i]);
+            }
+
+            int fila = 1;
+            while (rs.next()) {
+                Row row = sheet.createRow(fila++);
+                row.createCell(0).setCellValue(rs.getLong("sticker"));
+                row.createCell(1).setCellValue(rs.getDate("fecha_movimiento").toString());
+                row.createCell(2).setCellValue(rs.getDate("fecha_recaudo").toString());
+                row.createCell(3).setCellValue(rs.getString("tipo_horario"));
+                row.createCell(4).setCellValue(rs.getLong("nro_id"));
+                row.createCell(5).setCellValue(rs.getLong("nro_form"));
+                row.createCell(6).setCellValue(rs.getLong("valor"));
+            }
+
+            String nombreArchivo = "sticker_" + sticker + ".xls";
+            try (FileOutputStream fileOut = new FileOutputStream(nombreArchivo)) {
+                workbook.write(fileOut);
+                System.out.println("✅ Archivo exportado: " + nombreArchivo);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void exportarExcel() {
+        String nombreArchivo = "impuestos_exportados.xls";
         String sql = "SELECT * FROM impuestos";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);

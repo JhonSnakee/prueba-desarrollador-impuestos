@@ -24,11 +24,31 @@ public class Impuesto {
     }
 
     // Getters
-    public long getSticker() { return sticker; }
-    public LocalDate getFechaMovimiento() { return fechaMovimiento; }
-    public LocalDate getFechaRecaudo() { return fechaRecaudo; }
-    public String getTipoHorario() { return tipoHorario; }
-    public long getNroId() { return nroId; }
-    public long getNroForm() { return nroForm; }
-    public long getValor() { return valor; }
+    public long getSticker() {
+        return sticker;
+    }
+
+    public LocalDate getFechaMovimiento() {
+        return fechaMovimiento;
+    }
+
+    public LocalDate getFechaRecaudo() {
+        return fechaRecaudo;
+    }
+
+    public String getTipoHorario() {
+        return tipoHorario;
+    }
+
+    public long getNroId() {
+        return nroId;
+    }
+
+    public long getNroForm() {
+        return nroForm;
+    }
+
+    public long getValor() {
+        return valor;
+    }
 }

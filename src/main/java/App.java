@@ -14,7 +14,7 @@ public class App {
             System.out.println("2. Consultar por fecha");
             System.out.println("3. Consultar cantidad y suma por tipo de horario (A / N)");
             System.out.println("4. Buscar registro por sticker");
-            System.out.println("5. Exportar todos a archivo Excel (.xls)");
+            System.out.println("5. Exportar todos los datos a archivo Excel (.xls)");
             System.out.println("0. Salir");
             System.out.print("Elige una opción: ");
             opcion = scanner.nextInt();
@@ -37,7 +37,7 @@ public class App {
                     long sticker = scanner.nextLong();
                     service.buscarPorSticker(sticker);
                 }
-                case 5 -> service.exportarExcel("impuestos_exportados.xls");
+                case 5 -> service.exportarExcel();
                 case 0 -> System.out.println("👋 Adiós.");
                 default -> System.out.println("❌ Opción no válida.");
             }
