@@ -83,4 +83,4 @@ Los datos se exportan en formato `.xls` usando Apache POI con la opción del men
 
 ## 📬 Contacto
 
-> Desarrollado con cariño por [@JhonSnakee](https://github.com/JhonSnakee) para Jaime Torres S.A.
+> Desarrollado con cariño por [@JhonSnakee](https://github.com/JhonSnakee)
